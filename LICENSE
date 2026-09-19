@@ -1,0 +1,51 @@
+MIT License
+
+Copyright (c) 2026 ExMikuPro
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+SCOPE OF THIS LICENSE
+================================================================================
+
+This MIT License applies ONLY to the original works created by the author of
+this repository, namely:
+
+  - workflow_facefix_v2.json   (the ComfyUI workflow configuration)
+  - README.md
+  - REQUIREMENTS.md
+  - MODELS.md
+
+It does NOT apply to, and does NOT grant any rights over, any third-party
+software, custom nodes, models, or other assets referenced by this workflow,
+including but not limited to:
+
+  - ComfyUI itself
+  - ComfyUI custom nodes / extensions
+  - Checkpoints, LoRAs, VAEs
+  - ControlNet models
+  - SAM, YOLO / Ultralytics detectors
+  - Upscale models
+  - MeshGraphormer weights
+  - Any other third-party model or software
+
+Third-party software, custom nodes and model files remain subject to their
+respective licenses. This repository does not redistribute any of them.
+Users are responsible for obtaining them from their original distribution
+sources and for complying with their respective license terms.
