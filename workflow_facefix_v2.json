@@ -4498,11 +4498,11 @@
         "ue_convert": true
       },
       "widgets_values": [
-        876342070995133,
+        505835489339940,
         "randomize"
       ],
       "widgets_values_named": {
-        "value": 876342070995133,
+        "value": 505835489339940,
         "fixed": "randomize"
       }
     },
@@ -4873,11 +4873,11 @@
         }
       },
       "widgets_values": [
-        286809905118617,
+        961980108935325,
         "randomize"
       ],
       "widgets_values_named": {
-        "noise_seed": 286809905118617,
+        "noise_seed": 961980108935325,
         "control_after_generate": "randomize"
       },
       "color": "#2a363b",
@@ -7516,7 +7516,7 @@
       },
       "widgets_values": [
         false,
-        926846755224906,
+        464854280586939,
         "randomize",
         30,
         10,
@@ -7528,7 +7528,7 @@
       ],
       "widgets_values_named": {
         "add_noise": false,
-        "noise_seed": 926846755224906,
+        "noise_seed": 464854280586939,
         "control_after_generate": "randomize",
         "steps": 30,
         "cfg": 10,
@@ -7694,7 +7694,7 @@
       },
       "widgets_values": [
         true,
-        504595173482536,
+        481671170715149,
         "randomize",
         30,
         10,
@@ -7706,7 +7706,7 @@
       ],
       "widgets_values_named": {
         "add_noise": true,
-        "noise_seed": 504595173482536,
+        "noise_seed": 481671170715149,
         "control_after_generate": "randomize",
         "steps": 30,
         "cfg": 10,
@@ -7897,12 +7897,12 @@
           {
             "name": "A",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00005_.png&type=temp&subfolder=&rand=0.29261375489526553"
+            "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00015_.png&type=temp&subfolder=&rand=0.8568940339939608"
           },
           {
             "name": "B",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00006_.png&type=temp&subfolder=&rand=0.005036905298431704"
+            "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00016_.png&type=temp&subfolder=&rand=0.9598126323146146"
           }
         ]
       ],
@@ -7912,13 +7912,13 @@
             {
               "name": "A",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00005_.png&type=temp&subfolder=&rand=0.29261375489526553",
+              "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00015_.png&type=temp&subfolder=&rand=0.8568940339939608",
               "img": {}
             },
             {
               "name": "B",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00006_.png&type=temp&subfolder=&rand=0.005036905298431704",
+              "url": "/api/view?filename=rgthree.compare._temp_kpoeh_00016_.png&type=temp&subfolder=&rand=0.9598126323146146",
               "img": {}
             }
           ]
@@ -8043,10 +8043,10 @@
         }
       },
       "widgets_values": [
-        "lowres, worst quality, bad quality, jpeg artifacts, blurry, extra fingers, extra limbs, deformed, mutated hands, bad anatomy, text, watermark, logo, signature, nsfw, nude, cleavage, explicit"
+        "lowres, worst quality, bad quality, jpeg artifacts, blurry, extra fingers, extra limbs, deformed, mutated hands, bad anatomy, text, watermark, logo, signature, nsfw, nude, cleavage, realistic, photorealistic, 3d, western comic style, poorly drawn mouth, bad teeth, malformed teeth, separated tooth blocks, extra teeth, distorted lips"
       ],
       "widgets_values_named": {
-        "text": "lowres, worst quality, bad quality, jpeg artifacts, blurry, extra fingers, extra limbs, deformed, mutated hands, bad anatomy, text, watermark, logo, signature, nsfw, nude, cleavage, explicit"
+        "text": "lowres, worst quality, bad quality, jpeg artifacts, blurry, extra fingers, extra limbs, deformed, mutated hands, bad anatomy, text, watermark, logo, signature, nsfw, nude, cleavage, realistic, photorealistic, 3d, western comic style, poorly drawn mouth, bad teeth, malformed teeth, separated tooth blocks, extra teeth, distorted lips"
       }
     },
     {
@@ -8951,10 +8951,10 @@
         }
       },
       "widgets_values": [
-        "bad face, malformed face, deformed face, distorted face, asymmetrical face, uneven facial features, warped face, duplicate face, extra facial features, misplaced facial features, malformed nose, distorted nose, bad mouth, malformed mouth, distorted mouth, crooked mouth, asymmetrical mouth, misplaced mouth, oversized mouth, tiny mouth, warped lips, uneven lips, merged lips, duplicated lips, extra mouth, blurry mouth, poorly drawn lips, unnatural smile, distorted teeth, extra teeth, blurry face, poorly drawn face, melted face"
+        "bad face, malformed face, deformed face, distorted face, asymmetrical face, uneven facial features, warped face, duplicate face, extra facial features, misplaced facial features, malformed nose, distorted nose, bad mouth, malformed mouth, distorted mouth, crooked mouth, asymmetrical mouth, misplaced mouth, oversized mouth, tiny mouth, warped lips, uneven lips, merged lips, duplicated lips, extra mouth, blurry mouth, poorly drawn lips, unnatural smile, bad teeth, malformed teeth, uneven teeth, jagged teeth, separated tooth blocks, duplicated teeth, extra teeth, missing teeth, crooked teeth, distorted teeth, oversized teeth, overly detailed individual teeth, realistic teeth, blurry face, poorly drawn face, melted face"
       ],
       "widgets_values_named": {
-        "text": "bad face, malformed face, deformed face, distorted face, asymmetrical face, uneven facial features, warped face, duplicate face, extra facial features, misplaced facial features, malformed nose, distorted nose, bad mouth, malformed mouth, distorted mouth, crooked mouth, asymmetrical mouth, misplaced mouth, oversized mouth, tiny mouth, warped lips, uneven lips, merged lips, duplicated lips, extra mouth, blurry mouth, poorly drawn lips, unnatural smile, distorted teeth, extra teeth, blurry face, poorly drawn face, melted face"
+        "text": "bad face, malformed face, deformed face, distorted face, asymmetrical face, uneven facial features, warped face, duplicate face, extra facial features, misplaced facial features, malformed nose, distorted nose, bad mouth, malformed mouth, distorted mouth, crooked mouth, asymmetrical mouth, misplaced mouth, oversized mouth, tiny mouth, warped lips, uneven lips, merged lips, duplicated lips, extra mouth, blurry mouth, poorly drawn lips, unnatural smile, bad teeth, malformed teeth, uneven teeth, jagged teeth, separated tooth blocks, duplicated teeth, extra teeth, missing teeth, crooked teeth, distorted teeth, oversized teeth, overly detailed individual teeth, realistic teeth, blurry face, poorly drawn face, melted face"
       }
     },
     {
@@ -9859,7 +9859,7 @@
       },
       "widgets_values": [
         false,
-        766794058491389,
+        1116553375418071,
         "randomize",
         30,
         10,
@@ -9871,7 +9871,7 @@
       ],
       "widgets_values_named": {
         "add_noise": false,
-        "noise_seed": 766794058491389,
+        "noise_seed": 1116553375418071,
         "control_after_generate": "randomize",
         "steps": 30,
         "cfg": 10,
@@ -9935,12 +9935,12 @@
           {
             "name": "A",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_aqyva_00005_.png&type=temp&subfolder=&rand=0.19219281799093202"
+            "url": "/api/view?filename=rgthree.compare._temp_aqyva_00015_.png&type=temp&subfolder=&rand=0.26452167556913775"
           },
           {
             "name": "B",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_aqyva_00006_.png&type=temp&subfolder=&rand=0.5341481411628367"
+            "url": "/api/view?filename=rgthree.compare._temp_aqyva_00016_.png&type=temp&subfolder=&rand=0.6458116141672939"
           }
         ]
       ],
@@ -9950,13 +9950,13 @@
             {
               "name": "A",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_aqyva_00005_.png&type=temp&subfolder=&rand=0.19219281799093202",
+              "url": "/api/view?filename=rgthree.compare._temp_aqyva_00015_.png&type=temp&subfolder=&rand=0.26452167556913775",
               "img": {}
             },
             {
               "name": "B",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_aqyva_00006_.png&type=temp&subfolder=&rand=0.5341481411628367",
+              "url": "/api/view?filename=rgthree.compare._temp_aqyva_00016_.png&type=temp&subfolder=&rand=0.6458116141672939",
               "img": {}
             }
           ]
@@ -10010,10 +10010,10 @@
         }
       },
       "widgets_values": [
-        "detailed hands, anatomically correct hands, natural finger proportions, natural finger joints, clean finger separation, graceful fingers, relaxed hand pose, coherent hand structure, correct palm shape, clean hand lineart, natural overlapping fingers, properly occluded fingers, matching sleeve and cuff details, consistent character design, consistent anime art style"
+        "detailed anime hands, anatomically coherent hands, natural finger proportions, natural finger joints, clean finger separation, graceful fingers, relaxed hand pose, coherent hand structure, correct palm shape, clean anime hand lineart, natural overlapping fingers, properly occluded fingers, matching sleeve and cuff details, consistent character design, consistent anime art style"
       ],
       "widgets_values_named": {
-        "text": "detailed hands, anatomically correct hands, natural finger proportions, natural finger joints, clean finger separation, graceful fingers, relaxed hand pose, coherent hand structure, correct palm shape, clean hand lineart, natural overlapping fingers, properly occluded fingers, matching sleeve and cuff details, consistent character design, consistent anime art style"
+        "text": "detailed anime hands, anatomically coherent hands, natural finger proportions, natural finger joints, clean finger separation, graceful fingers, relaxed hand pose, coherent hand structure, correct palm shape, clean anime hand lineart, natural overlapping fingers, properly occluded fingers, matching sleeve and cuff details, consistent character design, consistent anime art style"
       }
     },
     {
@@ -11449,11 +11449,11 @@
         }
       },
       "widgets_values": [
-        619681256722296,
+        12345362037788,
         "randomize"
       ],
       "widgets_values_named": {
-        "value": 619681256722296,
+        "value": 12345362037788,
         "fixed": "randomize"
       },
       "color": "#a1309b",
@@ -12740,7 +12740,7 @@
         512,
         true,
         1024,
-        392269329249894,
+        430835030594970,
         "randomize",
         6,
         4,
@@ -12771,7 +12771,7 @@
         "guide_size": 512,
         "guide_size_for": true,
         "max_size": 1024,
-        "seed": 392269329249894,
+        "seed": 430835030594970,
         "control_after_generate": "randomize",
         "steps": 6,
         "cfg": 4,
@@ -12852,12 +12852,12 @@
           {
             "name": "A",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00005_.png&type=temp&subfolder=&rand=0.3159387382908698"
+            "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00015_.png&type=temp&subfolder=&rand=0.4455233479473484"
           },
           {
             "name": "B",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00006_.png&type=temp&subfolder=&rand=0.2820251617458738"
+            "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00016_.png&type=temp&subfolder=&rand=0.11411949516316455"
           }
         ]
       ],
@@ -12867,13 +12867,13 @@
             {
               "name": "A",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00005_.png&type=temp&subfolder=&rand=0.3159387382908698",
+              "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00015_.png&type=temp&subfolder=&rand=0.4455233479473484",
               "img": {}
             },
             {
               "name": "B",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00006_.png&type=temp&subfolder=&rand=0.2820251617458738",
+              "url": "/api/view?filename=rgthree.compare._temp_ggmuh_00016_.png&type=temp&subfolder=&rand=0.11411949516316455",
               "img": {}
             }
           ]
@@ -12929,10 +12929,10 @@
         }
       },
       "widgets_values": [
-        "detailed face, beautiful anime face, coherent facial anatomy, balanced facial proportions, clean facial lineart, symmetrical facial structure, natural facial features, detailed nose, natural mouth, well-shaped lips, clean lip line, subtle anime lips, symmetrical mouth, natural mouth proportions, coherent mouth anatomy, natural expression, clean mouth corners, properly aligned lips, clean jawline, consistent face shape, consistent character identity, consistent hairstyle, consistent anime art style"
+        "detailed anime face, beautiful anime face, coherent facial anatomy, balanced facial proportions, clean facial lineart, symmetrical facial structure, natural facial features, detailed nose, small anime mouth, natural mouth, well-shaped lips, clean lip line, subtle anime lips, symmetrical mouth, natural mouth proportions, coherent mouth anatomy, gentle anime smile, slightly parted lips, subtle visible upper teeth, smooth continuous upper teeth line, clean tooth shape, clean mouth corners, properly aligned lips, clean jawline, consistent face shape, consistent character identity, consistent hairstyle, consistent anime art style"
       ],
       "widgets_values_named": {
-        "text": "detailed face, beautiful anime face, coherent facial anatomy, balanced facial proportions, clean facial lineart, symmetrical facial structure, natural facial features, detailed nose, natural mouth, well-shaped lips, clean lip line, subtle anime lips, symmetrical mouth, natural mouth proportions, coherent mouth anatomy, natural expression, clean mouth corners, properly aligned lips, clean jawline, consistent face shape, consistent character identity, consistent hairstyle, consistent anime art style"
+        "text": "detailed anime face, beautiful anime face, coherent facial anatomy, balanced facial proportions, clean facial lineart, symmetrical facial structure, natural facial features, detailed nose, small anime mouth, natural mouth, well-shaped lips, clean lip line, subtle anime lips, symmetrical mouth, natural mouth proportions, coherent mouth anatomy, gentle anime smile, slightly parted lips, subtle visible upper teeth, smooth continuous upper teeth line, clean tooth shape, clean mouth corners, properly aligned lips, clean jawline, consistent face shape, consistent character identity, consistent hairstyle, consistent anime art style"
       }
     },
     {
@@ -13190,12 +13190,12 @@
           {
             "name": "A",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00005_.png&type=temp&subfolder=&rand=0.5843393513767947"
+            "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00015_.png&type=temp&subfolder=&rand=0.23898575901304175"
           },
           {
             "name": "B",
             "selected": true,
-            "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00006_.png&type=temp&subfolder=&rand=0.6633702912488917"
+            "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00016_.png&type=temp&subfolder=&rand=0.6976619785416296"
           }
         ]
       ],
@@ -13205,13 +13205,13 @@
             {
               "name": "A",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00005_.png&type=temp&subfolder=&rand=0.5843393513767947",
+              "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00015_.png&type=temp&subfolder=&rand=0.23898575901304175",
               "img": {}
             },
             {
               "name": "B",
               "selected": true,
-              "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00006_.png&type=temp&subfolder=&rand=0.6633702912488917",
+              "url": "/api/view?filename=rgthree.compare._temp_mgkfu_00016_.png&type=temp&subfolder=&rand=0.6976619785416296",
               "img": {}
             }
           ]
@@ -13266,10 +13266,10 @@
         }
       },
       "widgets_values": [
-        "1girl, upper body, sitting at a desk, chin resting on both hands, overlapping fingers, fingers touching cheeks, looking directly at viewer, playful smile, slightly open mouth, visible teeth, detailed eyes, long hair, loose sweater with cuffs, warm indoor lighting, anime style, clean lineart, highly detailed face and hands"
+        "1girl, upper body, elbows on desk, both hands gently supporting cheeks, fingers naturally resting along cheeks, looking at viewer, gentle anime smile, small anime mouth, slightly parted lips, subtle visible upper teeth, smooth continuous upper teeth line, detailed anime eyes, long hair, school uniform, indoor classroom, soft window light, clean anime lineart, cel-shaded anime illustration, highly detailed, consistent anime style"
       ],
       "widgets_values_named": {
-        "text": "1girl, upper body, sitting at a desk, chin resting on both hands, overlapping fingers, fingers touching cheeks, looking directly at viewer, playful smile, slightly open mouth, visible teeth, detailed eyes, long hair, loose sweater with cuffs, warm indoor lighting, anime style, clean lineart, highly detailed face and hands"
+        "text": "1girl, upper body, elbows on desk, both hands gently supporting cheeks, fingers naturally resting along cheeks, looking at viewer, gentle anime smile, small anime mouth, slightly parted lips, subtle visible upper teeth, smooth continuous upper teeth line, detailed anime eyes, long hair, school uniform, indoor classroom, soft window light, clean anime lineart, cel-shaded anime illustration, highly detailed, consistent anime style"
       }
     }
   ],
@@ -14836,10 +14836,10 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.6934334949441353,
+      "scale": 0.13310000000000047,
       "offset": [
-        -9828.565712166372,
-        -5157.631159560242
+        -9712.310671590403,
+        -1620.1258949559492
       ]
     },
     "ue_links": [],
