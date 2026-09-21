@@ -7,7 +7,7 @@
 主要处理链：
 
 ```
-Txt2Img → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output
+Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output
 ```
 
 > Version: **2.x (FaceFix V2)** · Workflow file: `workflow_facefix_v2.json`
@@ -34,10 +34,11 @@ AnimeFix-Workflow 是一份单一文件的 ComfyUI 工作流，把"生成 → �
 - **Eye Detailer** — 独立的眼睛检测器（`Eyeful_v2-Individual`）与 detailer 分支
 - **SAM assisted masks** — 由 bbox 提示生成手部 / 脸部轮廓 mask
 - **LoRA Stack** — `LoRA Stacker`（Efficiency Nodes）配置多 LoRA 及权重，经 `CR Apply LoRA Stack` 分发到各阶段
-- **Modular Set/Get routing** — 83 个 `Set / Get` 广播节点完成跨模块资源传递
+- **Modular Set/Get routing** — 79 个 `Set / Get` 广播节点完成跨模块资源传递
 - **Optional repair switches** — 3 个 `LazySwitchKJ` 可独立旁路 Hand Repair / Face Repair，并切换手部 mask 来源
-- **Before / after comparers** — 5 个 `Image Comparer (rgthree)` 节点，逐阶段对比
-- **Modular workflow layout** — 12 个 Group 分区：提示词 / 功能开关 / Txt2Img / Upscale refiner / HAND REPAIR / FACE REPAIR / Face detailer / Eye Detailer 等
+- **Before / after comparers** — 4 个 `Image Comparer (rgthree)` 节点，构成四级预览
+- **Four-stage preview** — `90 PREVIEW ①–④` 四级对照：① Base Upscale、② Upscale Refiner、③ Hand Repair、④ Final vs Original
+- **Modular workflow layout** — 17 个 Group 分区，按编号分组：`00 USER INPUT`、`01 MODEL & SHARED RESOURCES`、`02–05` 各 Pipe / Detailer 装配区、`10 TXT2IMG`、`20 BASE UPSCALE`、`30 UPSCALE REFINER`、`40 HAND REPAIR`、`50 FACE REPAIR`、`60 EYE DETAILER`、`70 OUTPUT`、`90 PREVIEW ①–④`
 
 ## Quick Start
 
@@ -57,18 +58,19 @@ AnimeFix-Workflow 是一份单一文件的 ComfyUI 工作流，把"生成 → �
 
 推荐使用流程：
 
-1. 修改 **Positive Prompt**（`提示词 → 正向提示词` 分组）
-2. 修改 **Negative Prompt**（`反向提示词` 分组）
-3. 选择 **Checkpoint**
-4. 配置 **LoRA**（`LoRA Stacker` 节点，默认 2 条）
-5. 在 `功能开关` 分组确认 Hand Repair / Face Repair / 手部 mask 来源三个开关的状态
+1. 修改 **Positive Prompt**（`00 USER INPUT` 分组）
+2. 修改 **Negative Prompt**（同在 `00 USER INPUT` 分组）
+3. 选择 **Checkpoint**（`01 MODEL & SHARED RESOURCES` 分组）
+4. 配置 **LoRA**（`LoRA Stacker` 节点，默认 2 条，同在 `01 MODEL & SHARED RESOURCES` 分组）
+5. 各模块开关已下沉到对应分组：`40 HAND REPAIR` 内的 **hand repair enable** 与 **hand mask source**，`50 FACE REPAIR` 内的 **face repair enable**
 6. **Queue Prompt**
-7. 依次经过：Txt2Img → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer
-8. 结果由 `SaveImage` 节点保存
+7. 依次经过：Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer
+8. 结果由 `SaveImage` 节点保存（`10 TXT2IMG` 中间产物、`70 OUTPUT` 最终输出）
+9. 通过 `90 PREVIEW ①–④` 四个对照节点逐级比较各阶段结果
 
 ### 关于开关
 
-`功能开关` 分组中的三个 `LazySwitchKJ` 节点：
+三个 `LazySwitchKJ` 节点分别位于对应的修复模块分组内（`40 HAND REPAIR` ×2、`50 FACE REPAIR` ×1）：
 
 | 开关 | 作用 |
 |---|---|
@@ -142,9 +144,9 @@ AnimeFix-Workflow 是一份单一文件的 ComfyUI 工作流，把"生成 → �
 
 **AnimeFix-Workflow** is a single-file, modular ComfyUI workflow aimed at SDXL / Illustrious anime image generation.
 
-Pipeline: `Txt2Img → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output`.
+Pipeline: `Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output`.
 
-Each stage is an independently switchable module, wired together through `Set / Get` broadcast nodes rather than long cables. It includes ESRGAN upscaling with low-denoise refinement, YOLO + SAM assisted hand detection and local inpainting, `FaceDetailerPipe` based face repair, a dedicated eye detailer, an Efficiency-Nodes LoRA stack, and five before/after comparers.
+Each stage is an independently switchable module, wired together through `Set / Get` broadcast nodes rather than long cables. It includes ESRGAN upscaling with low-denoise refinement, YOLO + SAM assisted hand detection and local inpainting, `FaceDetailerPipe` based face repair, a dedicated eye detailer, an Efficiency-Nodes LoRA stack, and four before/after comparers forming a four-stage preview.
 
 **This repository contains only workflow configuration and documentation.** No third-party models, no custom-node source code, and no ComfyUI distribution are included. See [REQUIREMENTS.md](REQUIREMENTS.md) for the custom nodes used and [MODELS.md](MODELS.md) for the models you need to obtain yourself.
 

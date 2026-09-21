@@ -2,7 +2,7 @@
 
 本文件由 `workflow_facefix_v2.json` **实际扫描**生成：逐一读取每个节点的 `type`、`properties.cnr_id`、`properties.aux_id` 与 `Node name for S&R`，再用本机安装的插件源码交叉验证节点归属。
 
-- 扫描节点总数：**168**
+- 扫描节点总数：**161**
 - 不同节点类型：**44**
 - 其中 ComfyUI 本体节点类型：**18**（另有 `PrimitiveInt` 亦属本体，见下方说明）
 - 第三方插件依赖：**13 个包**
@@ -61,15 +61,15 @@
 
 ### 3. ComfyUI-KJNodes
 
-- **Nodes used:** `SetNode` ×31, `GetNode` ×52, `LazySwitchKJ` ×3, `GrowMaskWithBlur`
+- **Nodes used:** `SetNode` ×29, `GetNode` ×50, `LazySwitchKJ` ×3, `GrowMaskWithBlur`
 - **Used for:** 跨模块资源广播（`Set / Get`）、三个修复模块开关、mask 扩张与羽化
 - **Repository:** https://github.com/kijai/ComfyUI-KJNodes
 
-> **这是最关键的依赖之一。** 工作流有 83 个 `Set / Get` 节点承担全部跨模块连接，缺少此插件会导致工作流无法正常加载。
+> **这是最关键的依赖之一。** 工作流有 79 个 `Set / Get` 节点承担全部跨模块连接，缺少此插件会导致工作流无法正常加载。
 
 ### 4. rgthree-comfy
 
-- **Nodes used:** `Image Comparer (rgthree)` ×5
+- **Nodes used:** `Image Comparer (rgthree)` ×4
 - **Used for:** 各阶段前后对比预览
 - **Repository:** https://github.com/rgthree/rgthree-comfy
 
