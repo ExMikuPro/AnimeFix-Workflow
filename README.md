@@ -1,153 +1,418 @@
 # AnimeFix-Workflow
 
-**A Modular Anime Generation & Refinement Workflow for ComfyUI**
+> A modular anime generation and refinement workflow for ComfyUI, focused on SDXL / Illustrious.
 
-面向 **SDXL / Illustrious** 二次元图像生成的模块化 ComfyUI 工作流。
+[![ComfyUI](https://img.shields.io/badge/ComfyUI-Workflow-111111?style=flat-square)](https://github.com/comfyanonymous/ComfyUI)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Workflow](https://img.shields.io/badge/Workflow-FaceFix%20V2-orange?style=flat-square)](workflow_facefix_v2.json)
 
-主要处理链：
+AnimeFix-Workflow 是一套面向 **SDXL / Illustrious 二次元生成** 的模块化 ComfyUI 工作流，将文生图、放大、高清重绘、手部修复、面部修复和眼睛细化串成一条可独立调节的处理链。
 
+```text
+Txt2Img
+   ↓
+Base Upscale
+   ↓
+Upscale Refiner
+   ↓
+Hand Repair
+   ↓
+Face Repair
+   ↓
+Eye Detailer
+   ↓
+Output
 ```
-Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output
-```
 
-> Version: **2.x (FaceFix V2)** · Workflow file: `workflow_facefix_v2.json`
+当前主工作流：[`workflow_facefix_v2.json`](workflow_facefix_v2.json)
+
+> 本仓库仅提供工作流配置与文档，不包含任何第三方模型、ComfyUI 本体或 Custom Nodes 源码。
 
 ---
-
-## 简介
-
-AnimeFix-Workflow 是一份单一文件的 ComfyUI 工作流，把"生成 → 放大 → 局部修复"拆成若干可独立开关的模块，用 `Set / Get` 广播节点在各模块之间传递模型、CLIP、VAE、LoRA、latent 与条件，从而避免长距离连线并把各阶段解耦。
-
-它不是"一键完美出图"的方案。工作流只是把常见问题的**处理机会**前置：手部畸形、脸部崩坏、眼睛细节不足。是否改善、改善多少，取决于底模、LoRA、提示词、分辨率与随机种子。
 
 ## Features
 
-以下均为 `workflow_facefix_v2.json` 中**实际存在**的功能：
-
-- **SDXL / Illustrious oriented workflow**
-- **Txt2Img generation** — `EmptyLatentImage` + `SamplerCustomAdvanced`，默认 832×1216
-- **Multi-stage sampling** — 主采样与放大重绘分离，各自独立的步数 / CFG / sampler / scheduler / denoise
-- **High-resolution upscale + refinement** — `ImageUpscaleWithModel`（ESRGAN）后 `ImageScale` 到 1248×1824，再低 denoise 重绘
-- **Automatic hand detection** — `UltralyticsDetectorProvider`（YOLO 手部检测）
-- **Hand local inpainting** — `SAMLoader` + `ImpactSimpleDetectorSEGS` + `SegsToCombinedMask` + `GrowMaskWithBlur` + `MaskDetailerPipe`，逐手裁剪局部重绘后羽化合成
-- **Face detection and FaceDetailer** — `FaceDetailerPipe` + `face_yolov8m` + SAM
-- **Eye Detailer** — 独立的眼睛检测器（`Eyeful_v2-Individual`）与 detailer 分支
-- **SAM assisted masks** — 由 bbox 提示生成手部 / 脸部轮廓 mask
-- **LoRA Stack** — `LoRA Stacker`（Efficiency Nodes）配置多 LoRA 及权重，经 `CR Apply LoRA Stack` 分发到各阶段
-- **Modular Set/Get routing** — 79 个 `Set / Get` 广播节点完成跨模块资源传递
-- **Optional repair switches** — 3 个 `LazySwitchKJ` 可独立旁路 Hand Repair / Face Repair，并切换手部 mask 来源
-- **Before / after comparers** — 4 个 `Image Comparer (rgthree)` 节点，构成四级预览
-- **Four-stage preview** — `90 PREVIEW ①–④` 四级对照：① Base Upscale、② Upscale Refiner、③ Hand Repair、④ Final vs Original
-- **Modular workflow layout** — 17 个 Group 分区，按编号分组：`00 USER INPUT`、`01 MODEL & SHARED RESOURCES`、`02–05` 各 Pipe / Detailer 装配区、`10 TXT2IMG`、`20 BASE UPSCALE`、`30 UPSCALE REFINER`、`40 HAND REPAIR`、`50 FACE REPAIR`、`60 EYE DETAILER`、`70 OUTPUT`、`90 PREVIEW ①–④`
-
-## Quick Start
-
-1. Install [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
-2. Install the required custom nodes listed in [REQUIREMENTS.md](REQUIREMENTS.md)
-3. Download the required models listed in [MODELS.md](MODELS.md)
-4. Put each model into its corresponding `ComfyUI/models/` subfolder
-5. Download `workflow_facefix_v2.json` from this repository
-6. Drag `workflow_facefix_v2.json` into the ComfyUI canvas (or use **Workflow → Open**)
-7. Resolve any **Missing Nodes** reported by ComfyUI Manager
-8. Select your own compatible Checkpoint / LoRA if necessary
-9. Run the workflow
-
-> 本仓库不提供任何自动安装脚本。ComfyUI 与其插件的安装方式会随版本变化，请以各自官方文档为准。
-
-## Usage
-
-推荐使用流程：
-
-1. 修改 **Positive Prompt**（`00 USER INPUT` 分组）
-2. 修改 **Negative Prompt**（同在 `00 USER INPUT` 分组）
-3. 选择 **Checkpoint**（`01 MODEL & SHARED RESOURCES` 分组）
-4. 配置 **LoRA**（`LoRA Stacker` 节点，默认 2 条，同在 `01 MODEL & SHARED RESOURCES` 分组）
-5. 各模块开关已下沉到对应分组：`40 HAND REPAIR` 内的 **hand repair enable** 与 **hand mask source**，`50 FACE REPAIR` 内的 **face repair enable**
-6. **Queue Prompt**
-7. 依次经过：Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer
-8. 结果由 `SaveImage` 节点保存（`10 TXT2IMG` 中间产物、`70 OUTPUT` 最终输出）
-9. 通过 `90 PREVIEW ①–④` 四个对照节点逐级比较各阶段结果
-
-### 关于开关
-
-三个 `LazySwitchKJ` 节点分别位于对应的修复模块分组内（`40 HAND REPAIR` ×2、`50 FACE REPAIR` ×1）：
-
-| 开关 | 作用 |
-|---|---|
-| **hand repair enable** | OFF 时原始图像直接通过，跳过手部修复 |
-| **hand mask source** | OFF = YOLO + SAM（本地检测）；ON = MeshGraphormer 分支 |
-| **face repair enable** | OFF 时 HAND FIXED 结果直接通过，跳过面部修复 |
-
-关闭某一模块只会跳过该阶段，不会影响其它阶段的连接。
-
-### 关于模型选择
-
-工作流中当前写入的 Checkpoint 与 LoRA 只是**作者开发测试时使用的配置**，不是必需品。
-
-- 你可以替换为其它兼容的 SDXL / Illustrious 模型。
-- 不同模型、不同 LoRA 组合会显著改变输出效果，需要重新调整提示词与 denoise 参数。
-- 无法保证所有 SDXL 系列模型都能得到相同或理想的结果。
-- 替换模型后请重新检查 LoRA 的触发词（trigger words）。
-
-## Hardware
-
-本仓库**不声明最低显卡要求**，也不声明任何硬件"一定可用"。显存占用取决于：
-
-- 所选 Checkpoint 的精度与体积
-- 生成分辨率与放大目标分辨率
-- 启用了哪些修复模块（Hand Repair / Face Repair / Eye Detailer 都会额外占用显存）
-- 各 custom node 自身的实现与依赖
-
-建议根据自己的硬件逐步测试：先只跑 Txt2Img，再逐个打开修复模块。
-
-## Third-party licenses
-
-本仓库**只包含工作流 JSON 配置与文档**，不重新分发任何第三方软件或模型。工作流引用了以下第三方项目，它们各自遵循其原始许可证：
-
-| Project | License (as observed locally) |
-|---|---|
-| [ComfyUI](https://github.com/comfyanonymous/ComfyUI) | GPL-3.0 |
-| [ComfyUI Impact Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) | GPL-3.0 |
-| [ComfyUI Impact Subpack](https://github.com/ltdrdata/ComfyUI-Impact-Subpack) | AGPL-3.0 |
-| [ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes) | GPL-3.0 |
-| [ComfyUI Inspire Pack](https://github.com/ltdrdata/ComfyUI-Inspire-Pack) | GPL-3.0 |
-| [efficiency-nodes-comfyui](https://github.com/jags111/efficiency-nodes-comfyui) | GPL-3.0 |
-| [ComfyUI_tinyterraNodes](https://github.com/TinyTerra/ComfyUI_tinyterraNodes) | GPL-3.0 |
-| [ComfyUI_smZNodes](https://github.com/shiimizu/ComfyUI_smZNodes) | GPL-3.0 |
-| [rgthree-comfy](https://github.com/rgthree/rgthree-comfy) | MIT |
-| [ComfyUI-Detail-Daemon](https://github.com/Jonseed/ComfyUI-Detail-Daemon) | MIT |
-| [comfyui_controlnet_aux](https://github.com/Fannovel16/comfyui_controlnet_aux) | Apache-2.0 |
-| [cg-use-everywhere](https://github.com/chrisgoringe/cg-use-everywhere) | Apache-2.0 |
-| [ComfyUI-AutomaticCFG](https://github.com/Extraltodeus/ComfyUI-AutomaticCFG) | MIT |
-| [ComfyUI_Comfyroll_CustomNodes](https://github.com/Suzie1/ComfyUI_Comfyroll_CustomNodes) | Please refer to the original project for license terms |
-
-上表许可证信息来自作者本机安装的对应项目副本，仅供参考，**不构成法律结论**。请以各项目官方仓库当前声明为准。
-
-**Third-party software, custom nodes and model files remain subject to their respective licenses.**
-
-## Disclaimer
-
-- This repository does **not** redistribute any third-party model files.
-- Users must obtain all models from their original distribution sources and comply with their respective licenses.
-- Third-party custom nodes and models are governed by their own licenses; this repository's MIT license does not extend to them.
-- AI output is non-deterministic / stochastic — identical settings do not guarantee identical results.
-- Results may change between model, ComfyUI and custom-node versions.
-- Future plugin updates may introduce compatibility issues.
-- 本仓库不保证修复效果，不保证输出一致性，也不保证跨版本兼容性。
-- 使用本工作流产生的内容及其合规性，由使用者自行负责。
-
-本仓库的 MIT 许可证**仅覆盖**作者编写的 workflow JSON 配置与文档，详见 [LICENSE](LICENSE)。
+- **SDXL / Illustrious oriented**
+  - 默认工作流面向二次元 SDXL / Illustrious 模型设计。
+- **Multi-stage generation**
+  - Txt2Img、放大和高清重绘分阶段执行，可分别调整采样参数。
+- **Base Upscale + Refiner**
+  - 使用 ESRGAN 放大，再进入低 denoise 高清重绘阶段。
+- **Hand Repair**
+  - 使用 YOLO 手部检测、SAM / MeshGraphormer mask 与局部 inpaint 修复手部结构。
+  - 支持在 **YOLO + SAM** 与 **MeshGraphormer** 两种手部 mask 来源之间切换。
+- **Face Repair**
+  - 使用 FaceDetailer + face detector + SAM 对面部进行局部修复。
+- **Eye Detailer**
+  - 使用独立眼睛检测器进一步细化眼睛区域。
+- **LoRA Stack**
+  - 通过 LoRA Stacker 统一管理多条 LoRA，并复用到不同修复阶段。
+- **Modular routing**
+  - 大量跨区域连接通过 Set / Get 节点完成，避免工作流出现大量长距离连线。
+- **Repair switches**
+  - Hand Repair 和 Face Repair 可以独立旁路，方便测试不同组合。
+- **Four-stage comparison preview**
+  - 工作流内置 4 个前后对比预览：
+    1. Txt2Img → Base Upscale
+    2. Base Upscale → Upscale Refiner
+    3. Hand Repair 前 → Hand Repair 后
+    4. Txt2Img 原图 → 最终输出
 
 ---
 
-## English Introduction
+## Workflow Structure
 
-**AnimeFix-Workflow** is a single-file, modular ComfyUI workflow aimed at SDXL / Illustrious anime image generation.
+| Group | Purpose |
+|---|---|
+| `00 USER INPUT` | Positive / Negative Prompt |
+| `01 MODEL & SHARED RESOURCES` | Checkpoint、VAE、LoRA、检测器、Upscaler |
+| `02 BASE PIPE SETUP` | 基础生成管线 |
+| `03 UPSCALE PIPE SETUP` | 放大重绘管线 |
+| `04 FACE DETAILER SETUP` | Face Repair 条件与 Detailer Pipe |
+| `05 EYE DETAILER SETUP` | Eye Detailer 条件与 Pipe |
+| `10 TXT2IMG` | 初始生成 |
+| `20 BASE UPSCALE` | 模型放大 |
+| `30 UPSCALE REFINER` | 高清重绘 |
+| `40 HAND REPAIR` | 手部检测、mask 与局部重绘 |
+| `50 FACE REPAIR` | 面部修复 |
+| `60 EYE DETAILER` | 眼睛细化 |
+| `70 OUTPUT` | 最终输出 |
+| `90 PREVIEW ①–④` | 四级前后对比 |
 
-Pipeline: `Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output`.
+---
 
-Each stage is an independently switchable module, wired together through `Set / Get` broadcast nodes rather than long cables. It includes ESRGAN upscaling with low-denoise refinement, YOLO + SAM assisted hand detection and local inpainting, `FaceDetailerPipe` based face repair, a dedicated eye detailer, an Efficiency-Nodes LoRA stack, and four before/after comparers forming a four-stage preview.
+## Requirements
 
-**This repository contains only workflow configuration and documentation.** No third-party models, no custom-node source code, and no ComfyUI distribution are included. See [REQUIREMENTS.md](REQUIREMENTS.md) for the custom nodes used and [MODELS.md](MODELS.md) for the models you need to obtain yourself.
+### 1. ComfyUI
 
-AI generation is stochastic. This workflow does not guarantee any particular repair quality or style consistency across models, versions, or seeds.
+先安装并确认 ComfyUI 可以正常运行：
+
+- [ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+
+### 2. Custom Nodes
+
+本工作流依赖多个第三方 Custom Nodes，例如：
+
+- ComfyUI Impact Pack
+- ComfyUI Impact Subpack
+- ComfyUI-KJNodes
+- rgthree-comfy
+- Comfyroll Studio
+- ComfyUI Inspire Pack
+- smZNodes
+- tinyterraNodes
+- ComfyUI Detail Daemon
+- efficiency-nodes-comfyui
+- ComfyUI AutomaticCFG
+- cg-use-everywhere
+- comfyui_controlnet_aux
+
+完整节点归属、用途和仓库地址请查看：
+
+**[REQUIREMENTS.md](REQUIREMENTS.md)**
+
+推荐在载入工作流后使用 **ComfyUI Manager → Install Missing Custom Nodes** 检查缺失节点。
+
+### 3. Models
+
+工作流会引用 Checkpoint、LoRA、Upscaler、YOLO Detector、SAM 和 ControlNet 等模型文件。
+
+完整文件名、用途和安装目录请查看：
+
+**[MODELS.md](MODELS.md)**
+
+> 所有模型均需用户自行从原始发布源获取。本仓库不重新分发任何第三方模型。
+
+---
+
+## Quick Start
+
+1. 安装并启动 ComfyUI。
+2. 安装 [REQUIREMENTS.md](REQUIREMENTS.md) 中列出的 Custom Nodes。
+3. 按照 [MODELS.md](MODELS.md) 准备对应模型。
+4. 下载本仓库中的 [`workflow_facefix_v2.json`](workflow_facefix_v2.json)。
+5. 将 JSON 拖入 ComfyUI Canvas，或使用 **Workflow → Open**。
+6. 如果出现 Missing Nodes，使用 ComfyUI Manager 补齐依赖。
+7. 在 `00 USER INPUT` 中填写 Positive / Negative Prompt。
+8. 在 `01 MODEL & SHARED RESOURCES` 中选择 Checkpoint、LoRA 和相关模型。
+9. 点击 **Queue Prompt**。
+10. 在 `90 PREVIEW ①–④` 中检查各阶段前后差异。
+
+---
+
+## Basic Usage
+
+### Prompt
+
+主要提示词位于 `00 USER INPUT`：
+
+- **Positive Prompt**：描述角色、姿态、服装、构图、场景等。
+- **Negative Prompt**：排除低质量、畸形结构、文字、水印等问题。
+
+Hand Repair 和 Face Repair 还包含各自的局部正 / 负向提示词，用于修复阶段，不需要把所有局部修复标签都塞进主提示词。
+
+### Checkpoint and LoRA
+
+工作流 JSON 中保存的 Checkpoint / LoRA 只是作者开发时的测试配置，并不是强制要求。
+
+你可以替换为其它兼容的 SDXL / Illustrious 模型，但更换底模或 LoRA 后通常需要重新调整：
+
+- Prompt
+- LoRA weight
+- CFG
+- denoise
+- sampler / scheduler
+- Detailer 参数
+
+### Repair Switches
+
+| Switch | Behavior |
+|---|---|
+| `hand repair enable` | OFF 时跳过手部修复，原图直接向后传递 |
+| `hand mask source` | OFF = YOLO + SAM；ON = MeshGraphormer |
+| `face repair enable` | OFF 时跳过 Face Repair，Hand Repair 结果直接向后传递 |
+
+---
+
+## Default Pipeline Notes
+
+### Txt2Img
+
+默认初始 latent：
+
+```text
+832 × 1216
+```
+
+### Base Upscale
+
+默认使用：
+
+```text
+RealESRGAN_x2.pth
+```
+
+然后缩放到：
+
+```text
+1248 × 1824
+```
+
+### Upscale Refiner
+
+放大图像会重新编码为 latent，再以较低 denoise 进行细节重绘。
+
+### Hand Repair
+
+默认流程：
+
+```text
+Hand Detector
+   ↓
+YOLO bbox
+   ↓
+SAM / MeshGraphormer mask
+   ↓
+Mask Expand + Feather
+   ↓
+MaskDetailer local inpaint
+```
+
+局部修复主要负责手掌、手指结构和局部线条。复杂遮挡、交叉手指或极端透视仍可能失败。
+
+### Face Repair
+
+默认使用 `face_yolov8m.pt` 检测面部区域，并通过 FaceDetailer 进行局部重绘。
+
+### Eye Detailer
+
+Face Repair 完成后，Eye Detailer 会再次检测眼睛区域并进行局部细化。
+
+---
+
+## Preview / Debugging
+
+| Preview | A (Left) | B (Right) |
+|---|---|---|
+| ① Base Upscale | Txt2Img 原图 | Base Upscale |
+| ② Upscale Refiner | Base Upscale | 高清重绘后 |
+| ③ Hand Repair | 修手前 | HAND FIXED |
+| ④ Final vs Original | Txt2Img 原图 | 最终输出 |
+
+如果 A / B 看起来完全相同，常见原因包括：
+
+- 对应修复模块被关闭。
+- Detector 没有检测到目标区域。
+- mask 为空或范围过小。
+- denoise 较低，局部变化不明显。
+- 输入图本身已经足够稳定。
+
+---
+
+## Models Used by the Default Workflow
+
+| Type | Default reference |
+|---|---|
+| Checkpoint | `waiIllustriousSDXL_v170.safetensors` |
+| VAE | `taesdxl` |
+| LoRA | `USNR STYLE_XL_lokr.safetensors` |
+| LoRA | `748cmSDXL.safetensors` |
+| Upscaler | `RealESRGAN_x2.pth` |
+| Face Detector | `face_yolov8m.pt` |
+| Eye Detector | `Eyeful_v2-Individual.pt` |
+| Hand Detector | `hand_yolov8s.pt` |
+| SAM | `sam_vit_b_01ec64.pth` |
+| ControlNet | SDXL Union ControlNet |
+
+具体目录和说明请以 [MODELS.md](MODELS.md) 为准。
+
+> `taesdxl` 是 ComfyUI 自带的近似 VAE，主要用于低成本 latent 预览。若你需要更高质量的最终 VAE 解码，请根据自己的 SDXL 模型配置合适的完整 VAE。
+
+---
+
+## Hardware
+
+本项目不声明固定的最低 GPU / VRAM 要求。
+
+显存需求会受到以下因素影响：
+
+- Checkpoint 精度和大小
+- 初始分辨率
+- 放大目标分辨率
+- 同时启用的修复模块
+- Custom Nodes 的实现版本
+- VAE / SAM / Detector 的加载方式
+
+如果显存不足，建议先只运行 Txt2Img，再逐步启用 Upscale、Hand Repair、Face Repair 和 Eye Detailer。
+
+---
+
+## Troubleshooting
+
+### Missing Nodes
+
+使用：
+
+```text
+ComfyUI Manager → Install Missing Custom Nodes
+```
+
+同时对照 [REQUIREMENTS.md](REQUIREMENTS.md)。
+
+### Model not found
+
+确认模型文件名与目录和 [MODELS.md](MODELS.md) 一致。
+
+ComfyUI 中部分 Loader 会保存完整的子目录名称，因此目录层级也可能影响下拉列表中的路径。
+
+### Hand Repair does nothing
+
+检查：
+
+- `hand repair enable` 是否开启
+- Hand Detector 是否检测到手
+- `hand mask source` 当前选择的分支
+- SAM / MeshGraphormer 是否正常工作
+- mask 是否覆盖手部
+- denoise 是否过低
+
+### Face / Eye repair changes identity too much
+
+尝试降低：
+
+- denoise
+- CFG
+- repair prompt 权重
+
+并避免在局部修复提示词中加入过多会改变角色身份的描述。
+
+---
+
+## Repository Structure
+
+```text
+AnimeFix-Workflow/
+├── workflow_facefix_v2.json   # Main ComfyUI workflow
+├── README.md                  # Project overview and usage
+├── REQUIREMENTS.md            # Required custom nodes
+├── MODELS.md                  # Required / referenced models
+├── LICENSE                    # Repository license
+└── .gitignore
+```
+
+---
+
+## Limitations
+
+AnimeFix-Workflow 不是“一键完美修复器”。
+
+以下情况仍可能生成错误：
+
+- 手指复杂交叉或严重遮挡
+- 极端透视 / foreshortening
+- 手部与面部大面积重叠
+- 牙齿、舌头等小尺寸口腔细节
+- 过小的人脸或眼睛
+- Detector 漏检
+- 不同模型 / LoRA 对 Detailer prompt 的理解差异
+
+生成式模型具有随机性。相同提示词和参数并不代表不同环境或不同版本中一定得到完全一致的输出。
+
+---
+
+## Documentation
+
+- [Custom Nodes / Requirements](REQUIREMENTS.md)
+- [Models](MODELS.md)
+- [Workflow JSON](workflow_facefix_v2.json)
+- [License](LICENSE)
+
+---
+
+## License
+
+本仓库作者原创的工作流配置与文档按照 [MIT License](LICENSE) 发布。
+
+该许可证 **不覆盖** 工作流引用的第三方：
+
+- ComfyUI
+- Custom Nodes
+- Checkpoints
+- LoRA
+- VAE
+- ControlNet
+- SAM
+- YOLO / Ultralytics Detector
+- Upscale models
+- MeshGraphormer weights
+
+第三方组件继续遵循各自的许可证和使用条款。
+
+---
+
+## Disclaimer
+
+- 本仓库不提供或重新分发第三方模型。
+- 用户应从模型 / 插件的原始发布源获取文件。
+- 用户有责任遵守第三方资源对应的许可证。
+- 工作流效果会随模型、LoRA、seed、ComfyUI 及 Custom Node 版本发生变化。
+- 项目不保证特定修复结果、跨版本兼容性或输出一致性。
+- 使用本工作流生成内容时，使用者应自行确认相关内容与资源的许可和合规要求。
+
+---
+
+## English Summary
+
+**AnimeFix-Workflow** is a modular ComfyUI workflow designed for SDXL / Illustrious anime image generation and refinement.
+
+Its pipeline is:
+
+```text
+Txt2Img → Base Upscale → Upscale Refiner → Hand Repair → Face Repair → Eye Detailer → Output
+```
+
+The workflow provides local hand inpainting, FaceDetailer-based face repair, a dedicated eye-detailing stage, reusable LoRA stacks, optional repair switches, and four before/after comparison views for debugging each major stage.
+
+This repository contains **workflow configuration and documentation only**. Third-party models and custom nodes must be installed separately from their original sources.
+
+See [REQUIREMENTS.md](REQUIREMENTS.md) and [MODELS.md](MODELS.md) before loading the workflow.
